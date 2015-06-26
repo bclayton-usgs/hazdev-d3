@@ -9,14 +9,16 @@ var line,
 
 view = D3View({
   el: document.querySelector('#example'),
-  title: 'D3 View Example',
-  xLabel: 'X axis',
-  yLabel: 'Y Axis'
+  title: 'D3View Example',
+  xLabel: 'X Axis',
+  yLabel: 'Y Axis',
+  xAxisPadding: 0.1,
+  yAxisPadding: 0.1
 });
 
 line = D3LineView({
   data: [[1,0], [2,2], [3,0]],
-  label: 'D3 Line',
+  label: 'Line 1',
   xLabel: 'X',
   yLabel: 'Y'
 });
@@ -24,7 +26,7 @@ view.views.add(line);
 
 line = D3LineView({
   data: [[1,3], [2,1], [3,2]],
-  label: 'D3 Line',
+  label: 'Line 2',
   xLabel: 'X',
   yLabel: 'Y'
 });
