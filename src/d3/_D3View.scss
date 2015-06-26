@@ -1,1 +1,38 @@
 
+.D3View {
+  fill: none;
+  stroke: none;
+  stroke-width: 0;
+
+  // text
+  .axis {
+    font-size: .8em;
+  }
+
+  .axis > .tick > text,
+  .plot-title,
+  .tooltip-content > text,
+  .x > .label,
+  .y > .label {
+    fill: #000;
+  }
+
+  .tooltip-content {
+    .label {
+      font-weight: bold;
+    }
+  }
+
+  // lines
+  .axis > .domain,
+  .axis > .tick > line,
+  .tooltip-outline {
+    stroke: #000;
+    stroke-width: 1;
+  }
+
+  .legend,
+  .tooltip-outline {
+    fill: #fff;
+  }
+}
