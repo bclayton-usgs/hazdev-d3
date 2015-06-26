@@ -52,6 +52,10 @@ var d3 = require('d3'),
  * @param options.xAxisFormat {Function|String}
  *        default null.
  *        x axis tickFormat.
+ * @param options.xAxisPadding {Number}
+ *        default 0.05.
+ *        pad extents by this ratio.
+ *        For example:  0.05 pads the x axis extent by 5% of the range.
  * @param options.xAxisScale {d3.scale}
  *        default d3.scale.linear().
  * @param options.xAxisTicks {Function(extent)|Array<Number>}
@@ -65,6 +69,10 @@ var d3 = require('d3'),
  * @param options.yAxisFormat {Function|String}
  *        default null.
  *        y axis tickFormat.
+ * @param options.yAxisPadding {Number}
+ *        default 0.05.
+ *        pad extents by this ratio.
+ *        For example:  0.05 pads the y axis extent by 5% of the range.
  * @param options.yAxisScale {d3.scale}
  *        default d3.scale.linear().
  * @param options.yAxisTicks {Function(extent)|Array<Number>}
@@ -98,7 +106,10 @@ var D3View = function (options) {
       _yAxis,
       _yAxisEl,
       _yAxisLabel,
-      _yEl;
+      _yEl,
+      // methods
+      _padExtent,
+      _padLogExtent;
 
 
   _this = View(options);
@@ -130,11 +141,13 @@ var D3View = function (options) {
       tooltipPadding: 5,
       width: 640,
       xAxisFormat: null,
+      xAxisPadding: 0.05,
       xAxisScale: d3.scale.linear(),
       xAxisTicks: null,
       xExtent: null,
       xLabel: '',
       yAxisFormat: null,
+      yAxisPadding: 0.05,
       yAxisScale: d3.scale.linear(),
       yAxisTicks: null,
       yExtent: null,
@@ -196,6 +209,56 @@ var D3View = function (options) {
 
     _xAxis = d3.svg.axis().orient('bottom').outerTickSize(0);
     _yAxis = d3.svg.axis().orient('left').outerTickSize(0);
+  };
+
+
+  /**
+   * Pad an extent.
+   *
+   * @param extent {Array<Number>}
+   *        first entry should be minimum.
+   *        last entry should be maximum.
+   * @param amount {Number}
+   *        percentage of range to pad.
+   *        For example: 0.05 = +/- 5% of range.
+   * @return {Array<Number>}
+   *         padded extent.
+   */
+  _padExtent = function (extent, amount) {
+    var start = extent[0],
+        end = extent[extent.length - 1],
+        range = end - start,
+        pad = range * amount;
+    return [start - pad, end + pad];
+  };
+
+  /**
+   * Pad a log based extent.
+   *
+   * Similar to _padExtent(), but padding occurs in log space.
+   *
+   * @param extent {Array<Number>}
+   *        first entry should be minimum.
+   *        last entry should be maximum.
+   * @param amount {Number}
+   *        percentage of range to pad.
+   *        For example: 0.05 = +/- 5% of range.
+   * @return {Array<Number>}
+   *         padded extent.
+   */
+  _padLogExtent = function (extent, amount) {
+    var base,
+        baseLog,
+        end,
+        start;
+
+    // convert min/max to base 10
+    base = 10;
+    baseLog = Math.log(base);
+    start = Math.log(extent[0]) / baseLog;
+    end = Math.log(extent[extent.length - 1]) / baseLog;
+    extent = _padExtent([start, end], amount);
+    return [Math.pow(base, extent[0]), Math.pow(base, extent[extent.length - 1])];
   };
 
   /**
@@ -435,8 +498,16 @@ var D3View = function (options) {
 
     // update axes extent
     xExtent = _this.getXExtent();
+    if (options.xAxisPadding) {
+      xExtent = (typeof xAxisScale.base === 'function' ?
+            _padLogExtent : _padExtent)(xExtent, options.xAxisPadding);
+    }
     xAxisScale.domain(xExtent);
     yExtent = _this.getYExtent(xExtent);
+    if (options.yAxisPadding) {
+      yExtent = (typeof yAxisScale.base === 'function' ?
+            _padLogExtent : _padExtent)(yExtent, options.yAxisPadding);
+    }
     yAxisScale.domain(yExtent);
 
     // redraw axes
