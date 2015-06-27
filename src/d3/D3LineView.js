@@ -1,6 +1,7 @@
 'use strict';
 
 var d3 = require('d3'),
+    ClassList = require('./ClassList'),
     D3SubView = require('d3/D3SubView'),
     Util = require('util/Util');
 
@@ -41,6 +42,7 @@ var D3LineView = function (options) {
       showPoints: true
     }, options), {silent: true});
 
+    ClassList.polyfill(_this.el);
     _this.el.classList.add('D3LineView');
     _el = d3.select(_this.el);
 

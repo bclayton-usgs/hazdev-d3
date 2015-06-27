@@ -1,6 +1,7 @@
 'use strict';
 
 var d3 = require('d3'),
+    ClassList = require('./ClassList'),
     Util = require('util/Util'),
     View = require('mvc/View');
 
@@ -58,6 +59,7 @@ var D3SubView = function (options) {
     // reference to view from element
     _this.el.view = _this;
 
+    ClassList.polyfill(_this.el);
     _el = d3.select(_this.el);
     _el.on('click', _this.onClick);
     _el.on('mouseout', _this.onMouseOut);
@@ -65,6 +67,7 @@ var D3SubView = function (options) {
 
     _this.legend = options.legend;
     if (_this.legend) {
+      ClassList.polyfill(_this.legend);
       _legend = d3.select(_this.legend);
       _legend.on('click', _this.onClick);
       _legend.on('mouseout', _this.onMouseOut);
