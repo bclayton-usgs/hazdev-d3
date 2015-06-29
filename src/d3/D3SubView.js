@@ -55,6 +55,7 @@ var D3SubView = function (options) {
 
     // ensure views have a unique id
     _this.id = options.id || (ID_SEQUENCE++);
+    _this.view = options.view;
 
     // reference to view from element
     _this.el.view = _this;
@@ -178,11 +179,8 @@ var D3SubView = function (options) {
   /**
    * Render sub view.
    * Element has already been attached to view.
-   *
-   * @param view {D3View}
-   *        view where sub view is plotted.
    */
-  _this.render = function (/*view*/) {
+  _this.render = function () {
   };
 
 
