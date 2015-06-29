@@ -107,10 +107,7 @@ var D3View = function (options) {
       _yAxis,
       _yAxisEl,
       _yAxisLabel,
-      _yEl,
-      // methods
-      _padExtent,
-      _padLogExtent;
+      _yEl;
 
 
   _this = View(options);
@@ -560,7 +557,7 @@ var D3View = function (options) {
     if (xAxisPadding) {
       xAxisScale = _this.model.get('xAxisScale');
       xExtent = (typeof xAxisScale.base === 'function' ?
-            _padLogExtent : _padExtent)(xExtent, xAxisPadding);
+            D3Util.padLogExtent : D3Util.padExtent)(xExtent, xAxisPadding);
     }
 
     return xExtent;
@@ -584,7 +581,7 @@ var D3View = function (options) {
     if (yAxisPadding) {
       yAxisScale = _this.model.get('yAxisScale');
       yExtent = (typeof yAxisScale.base === 'function' ?
-            _padLogExtent : _padExtent)(yExtent, yAxisPadding);
+            D3Util.padLogExtent : D3Util.padExtent)(yExtent, yAxisPadding);
     }
 
     return yExtent;
