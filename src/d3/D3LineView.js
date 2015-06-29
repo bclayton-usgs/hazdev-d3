@@ -8,6 +8,23 @@ var d3 = require('d3'),
 
 /**
  * Line view for a D3 plot.
+ *
+ * @param options {Object}
+ * @param options.data {Array<Array<Number>>}
+ *        default [].
+ *        array of arrays of x, y coordinates:
+ *        [ [x0, y0], [x1, y1], ... ]
+ * @param lineFormat {D3 Line}
+ *        default d3.svg.line().
+ * @param pointRadius {Number}
+ *        default 5.
+ *        radius for points.
+ * @param showLine {Boolean}
+ *        default true.
+ *        whether to plot line.
+ * @param showPoints {Boolean}
+ *        default true.
+ *        whether to plot points.
  */
 var D3LineView = function (options) {
   var _this,
@@ -141,6 +158,30 @@ var D3LineView = function (options) {
   }, _this.destroy);
 
   /**
+   * Format x value for tooltip.
+   *
+   * @param x {Number}
+   *        value to format.
+   * @return {String}
+   *         formatted number.
+   */
+  _this.formatX = function (x) {
+    return x;
+  };
+
+  /**
+   * Format y value for tooltip.
+   *
+   * @param y {Number}
+   *        value to format.
+   * @return {String}
+   *         formatted number.
+   */
+  _this.formatY = function (y) {
+    return y;
+  };
+
+  /**
    * X extent for view.
    *
    * @return {Array<Number>}
@@ -180,7 +221,9 @@ var D3LineView = function (options) {
    *        x, y coordinate of point.
    */
   _this.onPointOver = function (coords) {
-    var point;
+    var point,
+        x,
+        y;
 
     point = d3.event.target;
     point.classList.add('mouseover');
@@ -189,11 +232,11 @@ var D3LineView = function (options) {
       {text: _this.model.get('label')},
       [
         {class: 'label', text: _this.view.model.get('xLabel') + ': '},
-        {class: 'value', text: coords[0]}
+        {class: 'value', text: _this.formatX(_getX(coords))}
       ],
       [
         {class: 'label', text: _this.view.model.get('yLabel') + ': '},
-        {class: 'value', text: coords[1]}
+        {class: 'value', text: _this.formatY(_getY(coords))}
       ]
     ]);
   };
