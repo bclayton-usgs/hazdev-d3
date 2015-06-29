@@ -53,18 +53,12 @@ var D3LineView = function (options) {
    * Initialize view.
    */
   _initialize = function (options) {
-    _this.model.set(
-        Util.extend(
-          {
-            data: [],
-            pointRadius: 5,
-            showLine: true,
-            showPoints: true
-          },
-          options,
-          {view: null}, // prevent "view" argument from being added to model.
-          _this.model.get()
-        ), {silent: true});
+    _this.model.set(Util.extend({
+      data: [],
+      pointRadius: 5,
+      showLine: true,
+      showPoints: true
+    }, options, _this.model.get()), {silent: true});
 
     ClassList.polyfill(_this.el);
     _this.el.classList.add('D3LineView');
