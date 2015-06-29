@@ -63,9 +63,10 @@ var D3LineView = function (options) {
     _this.el.classList.add('D3LineView');
     _el = d3.select(_this.el);
 
-    _legend = d3.select(_this.legend);
-    if (_legend) {
+    if (_this.legend) {
+      ClassList.polyfill(_this.legend);
       _this.legend.classList.add('D3LineView');
+      _legend = d3.select(_this.legend);
       _legendLine = _legend.append('path')
           .attr('class', 'line');
       _legendPoint = _legend.append('circle')
@@ -73,6 +74,7 @@ var D3LineView = function (options) {
       _legendText = _legend.append('text')
           .attr('class', 'text');
     } else {
+      _legend = null;
       _legendLine = null;
       _legendText = null;
     }
