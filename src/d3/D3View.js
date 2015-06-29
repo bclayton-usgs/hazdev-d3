@@ -2,6 +2,7 @@
 
 var d3 = require('d3'),
     Collection = require('mvc/Collection'),
+    D3Util = require('./D3Util'),
     Util = require('util/Util'),
     View = require('mvc/View');
 
@@ -127,6 +128,7 @@ var D3View = function (options) {
       clickToSelect: true,
       height: 480,
       legendPosition: 'topright',
+      legendOffset: 20,
       marginBottom: 0,
       marginLeft: 0,
       marginRight: 0,
@@ -211,55 +213,6 @@ var D3View = function (options) {
     _yAxis = d3.svg.axis().orient('left').outerTickSize(0);
   };
 
-
-  /**
-   * Pad an extent.
-   *
-   * @param extent {Array<Number>}
-   *        first entry should be minimum.
-   *        last entry should be maximum.
-   * @param amount {Number}
-   *        percentage of range to pad.
-   *        For example: 0.05 = +/- 5% of range.
-   * @return {Array<Number>}
-   *         padded extent.
-   */
-  _padExtent = function (extent, amount) {
-    var start = extent[0],
-        end = extent[extent.length - 1],
-        range = end - start,
-        pad = range * amount;
-    return [start - pad, end + pad];
-  };
-
-  /**
-   * Pad a log based extent.
-   *
-   * Similar to _padExtent(), but padding occurs in log space.
-   *
-   * @param extent {Array<Number>}
-   *        first entry should be minimum.
-   *        last entry should be maximum.
-   * @param amount {Number}
-   *        percentage of range to pad.
-   *        For example: 0.05 = +/- 5% of range.
-   * @return {Array<Number>}
-   *         padded extent.
-   */
-  _padLogExtent = function (extent, amount) {
-    var base,
-        baseLog,
-        end,
-        start;
-
-    // convert min/max to base 10
-    base = 10;
-    baseLog = Math.log(base);
-    start = Math.log(extent[0]) / baseLog;
-    end = Math.log(extent[extent.length - 1]) / baseLog;
-    extent = _padExtent([start, end], amount);
-    return [Math.pow(base, extent[0]), Math.pow(base, extent[extent.length - 1])];
-  };
 
   /**
    * Destroy view.
@@ -355,15 +308,17 @@ var D3View = function (options) {
    * Views collection reset handler.
    */
   _this.onReset = function () {
-    var el;
+    var el,
+        toRemove = [];
     // call onRemove for all existing views.
     while (_plotArea.firstChild) {
       // detach view
       el = _plotArea.firstChild;
       _plotArea.removeChild(el);
       // call remove to clean up
-      _this.onRemove(el.view);
+      toRemove.push(el.view);
     }
+    _this.onRemove(toRemove);
     // call onAdd for all views
     _this.onAdd(_this.views.data());
   };
@@ -498,16 +453,8 @@ var D3View = function (options) {
 
     // update axes extent
     xExtent = _this.getXExtent();
-    if (options.xAxisPadding) {
-      xExtent = (typeof xAxisScale.base === 'function' ?
-            _padLogExtent : _padExtent)(xExtent, options.xAxisPadding);
-    }
     xAxisScale.domain(xExtent);
     yExtent = _this.getYExtent(xExtent);
-    if (options.yAxisPadding) {
-      yExtent = (typeof yAxisScale.base === 'function' ?
-            _padLogExtent : _padExtent)(yExtent, options.yAxisPadding);
-    }
     yAxisScale.domain(yExtent);
 
     // redraw axes
@@ -544,6 +491,7 @@ var D3View = function (options) {
   _this.renderViews = function () {
     var bbox,
         legendContent,
+        legendOffset,
         legendPosition,
         legendX,
         legendY;
@@ -557,11 +505,13 @@ var D3View = function (options) {
 
     // add views to plot area
     legendY = 0;
-    _this.views.data().forEach(function (view) {
+    _this.views.data().forEach(function (view, index) {
       // add elements
       _plotArea.appendChild(view.el);
+      view.el.setAttribute('data-index', index);
       if (view.legend) {
         legendContent.appendChild(view.legend);
+        view.legend.setAttribute('data-index', index);
       }
       // render elements
       view.render(_this);
@@ -576,23 +526,28 @@ var D3View = function (options) {
 
     // position legend content.
     bbox = legendContent.getBBox();
+    legendOffset = _this.model.get('legendOffset');
     legendPosition = _this.model.get('legendPosition');
-    legendX = 0;
-    legendY = 0;
+    legendX = legendOffset;
+    legendY = legendOffset;
     if (legendPosition === 'topright') {
-      legendX = -bbox.width;
+      legendX = -(legendOffset + bbox.width);
     } else if (legendPosition === 'bottomleft') {
-      legendY = -bbox.height;
+      legendY = -(legendOffset + bbox.height);
     } else if (legendPosition === 'bottomright') {
-      legendX = -bbox.width;
-      legendY = -bbox.height;
+      legendX = -(legendOffset + bbox.width);
+      legendY = -(legendOffset + bbox.height);
     } // else 'topleft'
     legendContent.setAttribute('transform',
         'translate(' + legendX + ',' + legendY + ')');
   };
 
   _this.getXExtent = function () {
-    var xExtent = _this.model.get('xExtent');
+    var xAxisPadding,
+        xAxisScale,
+        xExtent;
+
+    xExtent = _this.model.get('xExtent');
     if (xExtent === null) {
       xExtent = [];
       _this.views.data().forEach(function (view) {
@@ -600,11 +555,23 @@ var D3View = function (options) {
       });
       xExtent = d3.extent(xExtent);
     }
+
+    xAxisPadding = _this.model.get('xAxisPadding');
+    if (xAxisPadding) {
+      xAxisScale = _this.model.get('xAxisScale');
+      xExtent = (typeof xAxisScale.base === 'function' ?
+            _padLogExtent : _padExtent)(xExtent, xAxisPadding);
+    }
+
     return xExtent;
   };
 
   _this.getYExtent = function () {
-    var yExtent = _this.model.get('yExtent');
+    var yAxisPadding,
+        yAxisScale,
+        yExtent;
+
+    yExtent = _this.model.get('yExtent');
     if (yExtent === null) {
       yExtent = [];
       _this.views.data().forEach(function (view) {
@@ -612,43 +579,15 @@ var D3View = function (options) {
       });
       yExtent = d3.extent(yExtent);
     }
+
+    yAxisPadding = _this.model.get('yAxisPadding');
+    if (yAxisPadding) {
+      yAxisScale = _this.model.get('yAxisScale');
+      yExtent = (typeof yAxisScale.base === 'function' ?
+            _padLogExtent : _padExtent)(yExtent, yAxisPadding);
+    }
+
     return yExtent;
-  };
-
-  /**
-   * Format tooltip content.
-   *
-   * @param el {D3Element}
-   *        tooltip container element.
-   * @param data {Array<Object|Array>}
-   *        data passed to showTooltip.
-   *        this implementation expects objects (or arrays of objects):
-   *        obj.class {String} class attribute for text|tspan.
-   *        obj.text {String} content for text|tspan.
-   */
-  _this.formatTooltip = function (el, data) {
-    var y;
-
-    // add content to tooltip
-    data = data.map(function (line) {
-      var text = el.append('text');
-      if (typeof line.forEach === 'function') {
-        // array of components:
-        line.forEach(function (l) {
-          text.append('tspan').attr('class', l.class || '').text(l.text);
-        });
-      } else {
-        text.attr('class', line.class || '').text(line.text);
-      }
-      return text;
-    });
-    // position lines in tooltip
-    y = 0;
-    data.forEach(function (line) {
-      var bbox = line.node().getBBox();
-      y += bbox.height;
-      line.attr('y', y);
-    });
   };
 
   /**
@@ -684,7 +623,7 @@ var D3View = function (options) {
     // create tooltip content
     outline = tooltip.append('rect').attr('class', 'tooltip-outline');
     content = tooltip.append('g').attr('class', 'tooltip-content');
-    _this.formatTooltip(content, data);
+    D3Util.formatText(content, data);
     // position tooltip outline
     bbox = tooltip.node().getBBox();
     outline.attr('width', bbox.width + 2 * padding)
