@@ -20,7 +20,8 @@ line = D3LineView({
   data: [[1,0], [2,2], [3,0]],
   label: 'Line 1',
   xLabel: 'X',
-  yLabel: 'Y'
+  yLabel: 'Y',
+  view: view
 });
 view.views.add(line);
 
@@ -28,6 +29,7 @@ line = D3LineView({
   data: [[1,3], [2,1], [3,2]],
   label: 'Line 2',
   xLabel: 'X',
-  yLabel: 'Y'
+  yLabel: 'Y',
+  view: view
 });
 view.views.add(line);

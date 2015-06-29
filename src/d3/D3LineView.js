@@ -10,6 +10,7 @@ var d3 = require('d3'),
  * Line view for a D3 plot.
  *
  * @param options {Object}
+ *        options are passed to D3SubView.
  * @param options.data {Array<Array<Number>>}
  *        default [].
  *        array of arrays of x, y coordinates:
@@ -223,9 +224,7 @@ var D3LineView = function (options) {
    *        x, y coordinate of point.
    */
   _this.onPointOver = function (coords) {
-    var point,
-        x,
-        y;
+    var point;
 
     point = d3.event.target;
     point.classList.add('mouseover');
@@ -261,12 +260,14 @@ var D3LineView = function (options) {
     _y = _this.view.model.get('yAxisScale');
 
     // update legend
-    if (_legend) {
+    if (_this.legend) {
       _legendLine.attr('d', 'M0,-3L25,-3');
-      _legendPoint.attr('r', _this.model.get('pointRadius'))
+      _legendPoint
+          .attr('r', _this.model.get('pointRadius'))
           .attr('cx', 12.5)
           .attr('cy', -3);
-      _legendText.text(_this.model.get('label'))
+      _legendText
+          .text(_this.model.get('label'))
           .attr('dx', 30);
     }
 
