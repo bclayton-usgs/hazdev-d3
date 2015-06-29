@@ -16,10 +16,10 @@ var D3LineView = function (options) {
       _el,
       _legend,
       _legendLine,
+      _legendPoint,
       _legendText,
       _line,
       _lineFormat,
-      _view,
       _x,
       _y,
       // methods
@@ -40,7 +40,7 @@ var D3LineView = function (options) {
       pointRadius: 5,
       showLine: true,
       showPoints: true
-    }, options), {silent: true});
+    }, options, _this.model.get()), {silent: true});
 
     ClassList.polyfill(_this.el);
     _this.el.classList.add('D3LineView');
@@ -51,6 +51,8 @@ var D3LineView = function (options) {
       _this.legend.classList.add('D3LineView');
       _legendLine = _legend.append('path')
           .attr('class', 'line');
+      _legendPoint = _legend.append('circle')
+          .attr('class', 'point');
       _legendText = _legend.append('text')
           .attr('class', 'text');
     } else {
@@ -133,7 +135,6 @@ var D3LineView = function (options) {
     _line = null;
     _lineFormat = null;
 
-    _view = null;
     _x = null;
     _y = null;
     _this = null;
@@ -169,7 +170,7 @@ var D3LineView = function (options) {
     point.classList.remove('mouseover');
 
     // clear previous tooltip
-    _view.showTooltip(null, null);
+    _this.view.showTooltip(null, null);
   };
 
   /**
@@ -184,14 +185,14 @@ var D3LineView = function (options) {
     point = d3.event.target;
     point.classList.add('mouseover');
 
-    _view.showTooltip(coords, [
+    _this.view.showTooltip(coords, [
       {text: _this.model.get('label')},
       [
-        {class: 'label', text: _this.model.get('xLabel') + ': '},
+        {class: 'label', text: _this.view.model.get('xLabel') + ': '},
         {class: 'value', text: coords[0]}
       ],
       [
-        {class: 'label', text: _this.model.get('yLabel') + ': '},
+        {class: 'label', text: _this.view.model.get('yLabel') + ': '},
         {class: 'value', text: coords[1]}
       ]
     ]);
@@ -200,25 +201,29 @@ var D3LineView = function (options) {
   /**
    * Render sub view.
    * Element has already been attached to view.
-   *
-   * @param view {D3View}
-   *        view where sub view is plotted.
    */
-  _this.render = function (view) {
+  _this.render = function () {
     var data,
         points;
 
-    _view = view;
-    _x = view.model.get('xAxisScale');
-    _y = view.model.get('yAxisScale');
+    data = _this.model.get('data');
+    if (data.length === 0) {
+      // no data to plot.
+      return;
+    }
+
+    _x = _this.view.model.get('xAxisScale');
+    _y = _this.view.model.get('yAxisScale');
 
     // update legend
     if (_legend) {
-      _legendLine.attr('d', 'M0,0L25,0');
-      _legendText.text(_this.model.get('label')).attr('dx', 30);
+      _legendLine.attr('d', 'M0,-3L25,-3');
+      _legendPoint.attr('r', _this.model.get('pointRadius'))
+          .attr('cx', 12.5)
+          .attr('cy', -3);
+      _legendText.text(_this.model.get('label'))
+          .attr('dx', 30);
     }
-
-    data = _this.model.get('data');
 
     // update line
     if (!_this.model.get('showLine')) {
