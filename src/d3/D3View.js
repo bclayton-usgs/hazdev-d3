@@ -449,9 +449,9 @@ var D3View = function (options) {
     }
 
     // update axes extent
-    xExtent = _this.getXExtent();
+    xExtent = _this.getPlotXExtent();
     xAxisScale.domain(xExtent);
-    yExtent = _this.getYExtent(xExtent);
+    yExtent = _this.getPlotYExtent(xExtent);
     yAxisScale.domain(yExtent);
 
     // redraw axes
@@ -539,20 +539,18 @@ var D3View = function (options) {
         'translate(' + legendX + ',' + legendY + ')');
   };
 
-  _this.getXExtent = function () {
+  /**
+   * Get the plot x extent, including padding.
+   *
+   * @return {Array<Number>} x extents.
+   */
+  _this.getPlotXExtent = function () {
     var xAxisPadding,
         xAxisScale,
         xExtent;
 
-    xExtent = _this.model.get('xExtent');
-    if (xExtent === null) {
-      xExtent = [];
-      _this.views.data().forEach(function (view) {
-        xExtent = xExtent.concat(view.getXExtent());
-      });
-      xExtent = d3.extent(xExtent);
-    }
-
+    xExtent = _this.getXExtent();
+    console.log(xExtent);
     xAxisPadding = _this.model.get('xAxisPadding');
     if (xAxisPadding) {
       xAxisScale = _this.model.get('xAxisScale');
@@ -563,10 +561,58 @@ var D3View = function (options) {
     return xExtent;
   };
 
-  _this.getYExtent = function () {
+  /**
+   * Get the plot y extent, including padding.
+   *
+   * @param xExtent {Array<Number>}
+   *        xExtent is passed to _this.getYExtent().
+   * @return {Array<Number>} y extents.
+   */
+  _this.getPlotYExtent = function (xExtent) {
     var yAxisPadding,
         yAxisScale,
         yExtent;
+
+    yExtent = _this.getYExtent(xExtent);
+    yAxisPadding = _this.model.get('yAxisPadding');
+    if (yAxisPadding) {
+      yAxisScale = _this.model.get('yAxisScale');
+      yExtent = (typeof yAxisScale.base === 'function' ?
+            D3Util.padLogExtent : D3Util.padExtent)(yExtent, yAxisPadding);
+    }
+
+    return yExtent;
+  };
+
+  /**
+   * Get the data x extent.
+   *
+   * @return {Array<Number>} x extents.
+   */
+  _this.getXExtent = function () {
+    var xExtent;
+
+    xExtent = _this.model.get('xExtent');
+    if (xExtent === null) {
+      xExtent = [];
+      _this.views.data().forEach(function (view) {
+        xExtent = xExtent.concat(view.getXExtent());
+      });
+      xExtent = d3.extent(xExtent);
+    }
+
+    return xExtent;
+  };
+
+  /**
+   * Get the data y extent, including padding.
+   *
+   * @param xExtent {Array<Number>}
+   *        x extent, in case y extent is filtered based on x extent.
+   * @return {Array<Number>} x extents.
+   */
+  _this.getYExtent = function (/* xExtent */) {
+    var yExtent;
 
     yExtent = _this.model.get('yExtent');
     if (yExtent === null) {
@@ -575,13 +621,6 @@ var D3View = function (options) {
         yExtent = yExtent.concat(view.getYExtent());
       });
       yExtent = d3.extent(yExtent);
-    }
-
-    yAxisPadding = _this.model.get('yAxisPadding');
-    if (yAxisPadding) {
-      yAxisScale = _this.model.get('yAxisScale');
-      yExtent = (typeof yAxisScale.base === 'function' ?
-            D3Util.padLogExtent : D3Util.padExtent)(yExtent, yAxisPadding);
     }
 
     return yExtent;
