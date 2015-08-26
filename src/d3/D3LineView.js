@@ -251,11 +251,6 @@ var D3LineView = function (options) {
         points;
 
     data = _this.model.get('data');
-    if (data.length === 0) {
-      // no data to plot.
-      return;
-    }
-
     _x = _this.view.model.get('xAxisScale');
     _y = _this.view.model.get('yAxisScale');
 
@@ -272,7 +267,7 @@ var D3LineView = function (options) {
     }
 
     // update line
-    if (!_this.model.get('showLine')) {
+    if (data.length === 0 || !_this.model.get('showLine')) {
       _line.attr('d', null);
     } else {
       _line.attr('d', _lineFormat(data));
