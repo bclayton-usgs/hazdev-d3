@@ -4,7 +4,7 @@
   stroke: none;
   stroke-width: 0;
 
-  // text
+  /* text */
   .axis {
     font-size: .8em;
   }
@@ -23,7 +23,7 @@
     }
   }
 
-  // lines
+  /* lines */
   .axis > .domain,
   .axis > .tick > line,
   .tooltip-outline {
