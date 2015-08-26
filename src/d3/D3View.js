@@ -550,7 +550,6 @@ var D3View = function (options) {
         xExtent;
 
     xExtent = _this.getXExtent();
-    console.log(xExtent);
     xAxisPadding = _this.model.get('xAxisPadding');
     if (xAxisPadding) {
       xAxisScale = _this.model.get('xAxisScale');
