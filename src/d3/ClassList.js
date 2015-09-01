@@ -23,6 +23,10 @@ var ClassList = function (el) {
    * Initialize ClassList.
    */
   _initialize = function () {
+    _syncValue = null;
+    _classList = [];
+    _this.length = 0;
+
     _sync(true);
   };
 
@@ -35,19 +39,25 @@ var ClassList = function (el) {
    *        otherwise, set element state.
    */
   _sync = function (load) {
-    var value = ('' + el.getAttribute('class'));
-    if (_syncValue !== value) {
-      if (load) {
-        // read from element
+    var value;
+
+    if (load) {
+      // read from element
+      value = el.getAttribute('class');
+      if (value === null) {
+        _classList = [];
+        _this.length = 0;
+      } else {
+        value = '' + value;
         _classList = value.split(' ');
         _this.length = _classList.length;
-      } else {
-        // update element
-        value = _classList.join(' ');
-        el.setAttribute('class', value);
       }
-      _syncValue = value;
+    } else {
+      // update element
+      value = _classList.join(' ');
+      el.setAttribute('class', value);
     }
+    _syncValue = value;
   };
 
   /**
