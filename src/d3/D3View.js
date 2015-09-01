@@ -154,8 +154,9 @@ var D3View = function (options) {
     }, options), {silent: true});
 
     el = _this.el;
+    el.classList.add('D3View');
     el.innerHTML =
-          '<svg xmlns="http://www.w3.org/2000/svg" class="D3View">' +
+          '<svg xmlns="http://www.w3.org/2000/svg">' +
             '<defs>' +
               '<clipPath id="plotAreaClip">' +
                 '<rect x="0" y="0"></rect>' +
@@ -413,10 +414,9 @@ var D3View = function (options) {
       innerWidth = outerWidth - paddingLeft - paddingRight;
       innerHeight = outerHeight - paddingTop - paddingBottom;
       // update elements
+      _this.el.style.paddingBottom = (100 * height / width) + '%';
       _svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
       _svg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
-      _svg.setAttribute('height', height);
-      _svg.setAttribute('width', '100%');
       _plotAreaClip.setAttribute('width', innerWidth);
       _plotAreaClip.setAttribute('height', innerHeight);
       _margin.setAttribute('transform',
