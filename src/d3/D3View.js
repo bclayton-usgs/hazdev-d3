@@ -415,7 +415,7 @@ var D3View = function (options) {
       // update elements
       _svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
       _svg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
-      _svg.setAttribute('height', '768');
+      _svg.setAttribute('height', height);
       _plotAreaClip.setAttribute('width', innerWidth);
       _plotAreaClip.setAttribute('height', innerHeight);
       _margin.setAttribute('transform',
