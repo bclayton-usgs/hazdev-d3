@@ -211,6 +211,7 @@ var D3LineView = function (options) {
     var point;
 
     point = d3.event.target;
+    ClassList.polyfill(point);
     point.classList.remove('mouseover');
 
     // clear previous tooltip
@@ -227,6 +228,7 @@ var D3LineView = function (options) {
     var point;
 
     point = d3.event.target;
+    ClassList.polyfill(point);
     point.classList.add('mouseover');
 
     _this.view.showTooltip(coords, [
