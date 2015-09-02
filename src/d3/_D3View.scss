@@ -3,7 +3,7 @@
   height: 0;
   overflow: hidden;
   /**
-    padding-bottom is set by D3View class.
+    padding-bottom is set to `(100 * height / width)%` by the D3View class.
     This preserves aspect ratio, but allows plots to be responsive in IE.
    */
   position: relative;
