@@ -1,8 +1,23 @@
 
 .D3View {
-  fill: none;
-  stroke: none;
-  stroke-width: 0;
+  height: 0;
+  overflow: hidden;
+  /**
+    padding-bottom is set to `(100 * height / width)%` by the D3View class.
+    This preserves aspect ratio, but allows plots to be responsive in IE.
+   */
+  position: relative;
+  width: 100%;
+
+  > svg {
+    fill: none;
+    left: 0;
+    position: absolute;
+    stroke: none;
+    stroke-width: 0;
+    top: 0;
+    width: 100%;
+  }
 
   /* text */
   .axis {
