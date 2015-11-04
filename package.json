@@ -1,6 +1,6 @@
 {
   "name": "hazdev-d3",
-  "version": "0.0.16",
+  "version": "0.1.0",
   "homepage": "http://earthquake.usgs.gov/",
   "repository": "https://github.com/usgs/hazdev-d3.git",
   "description": "D3 Utilities",
@@ -48,8 +48,8 @@
     "grunt-contrib-uglify": "^0.9.2",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-phantomjs": "^1.0.2",
-    "hazdev-template": "usgs/hazdev-template",
-    "hazdev-webutils": "usgs/hazdev-webutils",
+    "hazdev-template": "0.2.0",
+    "hazdev-webutils": "0.1.0",
     "mocha": "^2.1.0",
     "sinon": "^1.12.2"
   },
