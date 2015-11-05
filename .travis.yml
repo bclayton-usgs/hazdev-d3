@@ -1,7 +1,16 @@
-language: node_js
-node_js:
-  - '0.10'
+sudo: false
+language: php
+php:
+  - '5.6'
 before_install:
-  - gem update --system
-  - gem install compass
+  - composer self-update
+  - nvm use 4.2.1
+  - npm --version
+  - node --version
   - npm install -g grunt-cli
+install:
+  - npm install caniuse-db
+  - npm install phantomjs
+  - npm install
+script:
+  - npm test
