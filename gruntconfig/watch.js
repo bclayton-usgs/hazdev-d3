@@ -20,7 +20,7 @@ var watch = {
       config.src + '/**/*.scss'
     ],
     tasks: [
-      'compass'
+      'postcss:dev'
     ]
   },
   html: {

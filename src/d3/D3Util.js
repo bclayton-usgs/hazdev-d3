@@ -38,6 +38,38 @@ var _formatText = function (el, data) {
 };
 
 /**
+ * Persistently tries to get the bounding box for the given element.
+ *
+ * @param element {SVGText}
+ *      The element for which to get the bounding box.
+ * @return {Object}
+ *      A bounding box object with x, y, width, height attributes
+ */
+var _getBBox = function (element) {
+  var bbox;
+
+  try {
+    bbox = element.getBBox();
+  } catch (e) {
+    // Ignore
+  }
+
+  if (!bbox) {
+    try {
+      bbox = element.getBoundingClientRect();
+    } catch (e) {
+      // Ignore
+    }
+  }
+
+  if (!bbox) {
+    bbox = {x: 0, y: 0, width: 0, height: 0};
+  }
+
+  return bbox;
+};
+
+/**
  * Pad an extent.
  *
  * @param extent {Array<Number>}
@@ -89,6 +121,7 @@ var _padLogExtent = function (extent, amount) {
 
 var D3Util = {
   formatText: _formatText,
+  getBBox: _getBBox,
   padExtent: _padExtent,
   padLogExtent: _padLogExtent
 };
