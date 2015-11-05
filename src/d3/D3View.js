@@ -380,7 +380,7 @@ var D3View = function (options) {
 
     if (changed.hasOwnProperty('title')) {
       _plotTitle.textContent = options.title;
-      _plotTitle.setAttribute('y', _plotTitle.getBBox().height);
+      _plotTitle.setAttribute('y', D3Util.getBBox(_plotTitle).height);
     }
     if (changed.hasOwnProperty('xLabel')) {
       _xAxisLabel.textContent = options.xLabel;
@@ -478,8 +478,10 @@ var D3View = function (options) {
     d3.select(_yAxisEl).call(_yAxis);
 
     // update label positions based on axes size
-    _xAxisLabel.setAttribute('y', paddingBottom - _xAxisLabel.getBBox().height);
-    _yAxisLabel.setAttribute('y', _yAxisLabel.getBBox().height - paddingLeft);
+    _xAxisLabel.setAttribute('y',
+        paddingBottom - D3Util.getBBox(_xAxisLabel).height);
+    _yAxisLabel.setAttribute('y',
+        D3Util.getBBox(_yAxisLabel).height - paddingLeft);
 
     // now render views
     _this.renderViews();
@@ -517,7 +519,7 @@ var D3View = function (options) {
       view.render(_this);
       // position legend
       if (view.legend) {
-        bbox = view.legend.getBBox();
+        bbox = D3Util.getBBox(view.legend);
         legendY += bbox.height;
         view.legend.setAttribute('transform',
             'translate(0,' + legendY  + ')');
@@ -525,7 +527,7 @@ var D3View = function (options) {
     });
 
     // position legend content.
-    bbox = legendContent.getBBox();
+    bbox = D3Util.getBBox(legendContent);
     legendOffset = _this.model.get('legendOffset');
     legendPosition = _this.model.get('legendPosition');
     legendX = legendOffset;
@@ -663,7 +665,7 @@ var D3View = function (options) {
     content = tooltip.append('g').attr('class', 'tooltip-content');
     D3Util.formatText(content, data);
     // position tooltip outline
-    bbox = tooltip.node().getBBox();
+    bbox = D3Util.getBBox(tooltip.node());
     outline.attr('width', bbox.width + 2 * padding)
         .attr('height', bbox.height + 2 * padding);
     content.attr('transform', 'translate(' + padding + ',0)');
@@ -673,9 +675,9 @@ var D3View = function (options) {
     x = options.xAxisScale(coords[0]);
     y = options.yAxisScale(coords[1]);
     // box rendering inside
-    bbox = _innerFrame.getBBox();
+    bbox = D3Util.getBBox(_innerFrame);
     // box being rendered
-    tooltipBbox = _tooltip.getBBox();
+    tooltipBbox = D3Util.getBBox(_tooltip);
     // keep tooltip in graph area
     if (x + tooltipBbox.width > bbox.width) {
       x = x - tooltipBbox.width - offset;
