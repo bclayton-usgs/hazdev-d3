@@ -244,6 +244,23 @@ var D3LineView = function (options) {
     ]);
   };
 
+  _this.plotPoints = function (points) {
+    points.enter()
+        .append('svg:circle')
+        .attr('class', 'point')
+        .on('mouseout', _this.onPointOut)
+        .on('mouseover', _this.onPointOver);
+
+    points.attr('r', _this.model.get('pointRadius'))
+        .attr('cx', _this.getScaleX)
+        .attr('cy', _this.getScaleY);
+
+    points.exit()
+        .on('mouseout', null)
+        .on('mouseover', null)
+        .remove();
+  };
+
   /**
    * Render sub view.
    * Element has already been attached to view.
@@ -281,18 +298,7 @@ var D3LineView = function (options) {
     if (!_this.model.get('showPoints')) {
       points.remove();
     } else {
-      points.enter()
-          .append('svg:circle')
-          .attr('class', 'point')
-          .on('mouseout', _this.onPointOut)
-          .on('mouseover', _this.onPointOver);
-      points.attr('r', _this.model.get('pointRadius'))
-          .attr('cx', _getScaleX)
-          .attr('cy', _getScaleY);
-      points.exit()
-          .on('mouseout', null)
-          .on('mouseover', null)
-          .remove();
+      _this.plotPoints(points);
     }
   };
 
