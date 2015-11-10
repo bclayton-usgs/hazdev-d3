@@ -41,8 +41,6 @@ var D3LineView = function (options) {
       _x,
       _y,
       // methods
-      _getScaleX,
-      _getScaleY,
       _getX,
       _getY;
 
@@ -85,8 +83,8 @@ var D3LineView = function (options) {
         .attr('clip-path', 'url(#plotAreaClip)');
 
     _lineFormat = options.lineFormat || d3.svg.line();
-    _lineFormat.x(_getScaleX);
-    _lineFormat.y(_getScaleY);
+    _lineFormat.x(_this.getScaleX);
+    _lineFormat.y(_this.getScaleY);
   };
 
   /**
@@ -96,7 +94,7 @@ var D3LineView = function (options) {
    *        data point.
    * @return {Number} x plot coordinate.
    */
-  _getScaleX = function (d) {
+  _this.getScaleX = function (d) {
     return _x(d[0]);
   };
 
@@ -107,7 +105,7 @@ var D3LineView = function (options) {
    *        data point.
    * @return {Number} y plot coordinate.
    */
-  _getScaleY = function (d) {
+  _this.getScaleY = function (d) {
     return _y(d[1]);
   };
 
@@ -244,6 +242,23 @@ var D3LineView = function (options) {
     ]);
   };
 
+  _this.plotPoints = function (points) {
+    points.enter()
+        .append('svg:circle')
+        .attr('class', 'point')
+        .on('mouseout', _this.onPointOut)
+        .on('mouseover', _this.onPointOver);
+
+    points.attr('r', _this.model.get('pointRadius'))
+        .attr('cx', _this.getScaleX)
+        .attr('cy', _this.getScaleY);
+
+    points.exit()
+        .on('mouseout', null)
+        .on('mouseover', null)
+        .remove();
+  };
+
   /**
    * Render sub view.
    * Element has already been attached to view.
@@ -281,18 +296,7 @@ var D3LineView = function (options) {
     if (!_this.model.get('showPoints')) {
       points.remove();
     } else {
-      points.enter()
-          .append('svg:circle')
-          .attr('class', 'point')
-          .on('mouseout', _this.onPointOut)
-          .on('mouseover', _this.onPointOver);
-      points.attr('r', _this.model.get('pointRadius'))
-          .attr('cx', _getScaleX)
-          .attr('cy', _getScaleY);
-      points.exit()
-          .on('mouseout', null)
-          .on('mouseover', null)
-          .remove();
+      _this.plotPoints(points);
     }
   };
 
