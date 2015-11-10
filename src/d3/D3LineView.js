@@ -41,8 +41,6 @@ var D3LineView = function (options) {
       _x,
       _y,
       // methods
-      _getScaleX,
-      _getScaleY,
       _getX,
       _getY;
 
@@ -85,8 +83,8 @@ var D3LineView = function (options) {
         .attr('clip-path', 'url(#plotAreaClip)');
 
     _lineFormat = options.lineFormat || d3.svg.line();
-    _lineFormat.x(_getScaleX);
-    _lineFormat.y(_getScaleY);
+    _lineFormat.x(_this.getScaleX);
+    _lineFormat.y(_this.getScaleY);
   };
 
   /**
@@ -96,7 +94,7 @@ var D3LineView = function (options) {
    *        data point.
    * @return {Number} x plot coordinate.
    */
-  _getScaleX = function (d) {
+  _this.getScaleX = function (d) {
     return _x(d[0]);
   };
 
@@ -107,7 +105,7 @@ var D3LineView = function (options) {
    *        data point.
    * @return {Number} y plot coordinate.
    */
-  _getScaleY = function (d) {
+  _this.getScaleY = function (d) {
     return _y(d[1]);
   };
 
