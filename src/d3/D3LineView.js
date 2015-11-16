@@ -278,9 +278,8 @@ var D3LineView = function (options) {
       if (!_this.model.get('showLegendPoint')) {
         _legendPoint.remove();
       } else {
-
-        if (!_legendPoint) {
-          _legendPoint = _legend.append('circle')
+        if (_legendPoint.empty()) {
+          _legendPoint = _legend.append('svg:circle')
               .attr('class', 'point');
         }
 
