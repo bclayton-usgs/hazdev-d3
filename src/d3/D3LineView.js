@@ -69,10 +69,6 @@ var D3LineView = function (options) {
       _legend = d3.select(_this.legend);
       _legendLine = _legend.append('path')
           .attr('class', 'line');
-      if (_this.model.get('showLegendPoint')) {
-        _legendPoint = _legend.append('circle')
-            .attr('class', 'point');
-      }
       _legendText = _legend.append('text')
           .attr('class', 'text');
     } else {
@@ -277,12 +273,18 @@ var D3LineView = function (options) {
     // update legend
     if (_this.legend) {
       _legendLine.attr('d', 'M0,-3L25,-3');
-      if (_this.model.get('showLegendPoint')) {
-        _legendPoint
+
+      _legendPoint = _legend.selectAll('.point');
+      if (!_this.model.get('showLegendPoint')) {
+        _legendPoint.remove();
+      } else {
+        _legend.append('circle')
+            .attr('class', 'point')
             .attr('r', _this.model.get('pointRadius'))
             .attr('cx', 12.5)
             .attr('cy', -3);
       }
+
       _legendText
           .text(_this.model.get('label'))
           .attr('dx', 30);
