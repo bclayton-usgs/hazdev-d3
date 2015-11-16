@@ -278,8 +278,13 @@ var D3LineView = function (options) {
       if (!_this.model.get('showLegendPoint')) {
         _legendPoint.remove();
       } else {
-        _legend.append('circle')
-            .attr('class', 'point')
+
+        if (!_legendPoint) {
+          _legendPoint = _legend.append('circle')
+              .attr('class', 'point');
+        }
+
+        _legendPoint
             .attr('r', _this.model.get('pointRadius'))
             .attr('cx', 12.5)
             .attr('cy', -3);
