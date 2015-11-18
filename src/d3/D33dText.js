@@ -7,6 +7,7 @@ var Util = require('util/Util'),
 var _DEFAULTS = {
   'className': 'D33dText',
   'coords': [0, 0, 0],
+  'direction': null,
   'text': '',
   'textAnchor': 'start'
 };
@@ -48,6 +49,7 @@ var D33dText = function (options) {
     _this.model.set({
       className: options.className,
       coords: options.coords,
+      direction: options.direction,
       text: options.text,
       textAnchor: options.textAnchor
     }, {silent: true});
@@ -67,6 +69,7 @@ var D33dText = function (options) {
   _this.getData = function () {
     return {
       coords: _this.model.get('coords'),
+      direction: _this.model.get('direction'),
       el: _this.el
     };
   };

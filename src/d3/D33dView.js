@@ -3,7 +3,8 @@
 
 var Camera = require('math/Camera'),
     D3BaseView = require('./D3BaseView'),
-    Util = require('util/Util');
+    Util = require('util/Util'),
+    Vector = require('math/Vector');
 
 
 var _DEFAULTS = {
@@ -111,6 +112,9 @@ var D33dView = function (options) {
     } else if (type === 'text') {
       obj._projected = _this.project(obj.coords);
       obj._z = obj._projected[2];
+      if (obj.direction) {
+        obj._direction = obj.direction.map(_this.project);
+      }
     } else if (type === 'path') {
       obj._projected = obj.coords.map(_this.project);
       obj._z = Math.max.apply(Math, obj._projected.map(function (c) {
@@ -132,7 +136,13 @@ var D33dView = function (options) {
    *        Element where object should be appended.
    */
   _renderObject = function (obj, el) {
-    var type;
+    var angle,
+        direction,
+        end,
+        start,
+        type,
+        x,
+        y;
 
     if (obj._z <= 0) {
       // behind camera
@@ -155,8 +165,22 @@ var D33dView = function (options) {
         _renderObject(item, obj.el);
       });
     } else if (type === 'text') {
-      el.setAttribute('x', obj._projected[0]);
-      el.setAttribute('y', obj._projected[1]);
+      x = obj._projected[0];
+      y = obj._projected[1];
+      el.setAttribute('x', x);
+      el.setAttribute('y', y);
+      if (obj._direction) {
+        // direction representa a vector that should be parallel to the text
+        end = Vector(obj._direction[1]);
+        start = Vector(obj._direction[0]);
+        direction = end.subtract(start);
+        // check angle in camera plane
+        direction.z(0);
+        angle = direction.azimuth() * 180 / Math.PI;
+        // subtract azimuth from 90, screen y axis is in opposite direction
+        angle = 90 - angle;
+        el.setAttribute('transform', 'rotate(' + [angle, x, y].join(' ') + ')');
+      }
     } else if (type === 'path') {
       el.setAttribute('d',
           'M' +

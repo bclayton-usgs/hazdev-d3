@@ -157,6 +157,7 @@ var D3Axis = function (options) {
           // offset
           .add(titleVector)
           .data(),
+      direction: extent,
       text: title,
       textAnchor: titleAnchor
     });
@@ -178,6 +179,7 @@ var D3Axis = function (options) {
           }),
           D33dText({
             coords: tick.add(labelVector).data(),
+            direction: extent,
             text: format(tick.data()),
             textAnchor: labelAnchor
           })
