@@ -246,6 +246,10 @@ var D3View = function (options) {
     _this = null;
   }, _this.destroy);
 
+  _this.getLegendClass = function (/*data, index, scope*/) {
+    return 'legend-content';
+  };
+
   /**
    * Views collection add handler.
    *
@@ -503,7 +507,7 @@ var D3View = function (options) {
     Util.empty(_legend);
     legendContent = d3.select(_legend)
         .append('g')
-        .attr('class', 'legend-content').node();
+        .attr('class', _this.getLegendClass).node();
 
     // add views to plot area
     legendY = 0;

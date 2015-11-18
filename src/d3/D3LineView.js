@@ -55,7 +55,8 @@ var D3LineView = function (options) {
       data: [],
       pointRadius: 5,
       showLine: true,
-      showPoints: true
+      showPoints: true,
+      showLegendPoint: true,
     }, options, _this.model.get()), {silent: true});
 
     ClassList.polyfill(_this.el);
@@ -68,8 +69,6 @@ var D3LineView = function (options) {
       _legend = d3.select(_this.legend);
       _legendLine = _legend.append('path')
           .attr('class', 'line');
-      _legendPoint = _legend.append('circle')
-          .attr('class', 'point');
       _legendText = _legend.append('text')
           .attr('class', 'text');
     } else {
@@ -274,10 +273,22 @@ var D3LineView = function (options) {
     // update legend
     if (_this.legend) {
       _legendLine.attr('d', 'M0,-3L25,-3');
-      _legendPoint
-          .attr('r', _this.model.get('pointRadius'))
-          .attr('cx', 12.5)
-          .attr('cy', -3);
+
+      _legendPoint = _legend.selectAll('.point');
+      if (!_this.model.get('showLegendPoint')) {
+        _legendPoint.remove();
+      } else {
+        if (_legendPoint.empty()) {
+          _legendPoint = _legend.append('svg:circle')
+              .attr('class', 'point');
+        }
+
+        _legendPoint
+            .attr('r', _this.model.get('pointRadius'))
+            .attr('cx', 12.5)
+            .attr('cy', -3);
+      }
+
       _legendText
           .text(_this.model.get('label'))
           .attr('dx', 30);
