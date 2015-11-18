@@ -9,15 +9,21 @@ var D33dGroup = require('./D33dGroup'),
 
 var _DEFAULTS = {
   className: 'D33dAxis',
-  extent: [[0, 0, 0], [1, 0, 0]],
+  extent: [
+    [0, 0, 0],
+    [1, 0, 0]
+  ],
   format: function (coord) {
     return ''+coord;
   },
+  labelAnchor: 'middle',
+  labelVector: null,
   padding: 0.05,
   scale: null,
-  ticks: 10,
   tickVector: [0, 0, 1],
+  ticks: 10,
   title: 'Axis',
+  titleAnchor: 'middle',
   titleVector: null
 };
 
@@ -29,20 +35,29 @@ var _DEFAULTS = {
  * @param options.extent {Array<Array<Number>>}
  *        default [[0, 0, 0], [1, 0, 0]].
  *        axis extent.
- * @param optoins.format {Function(Array<Number>)}
+ * @param options.format {Function(Array<Number>)}
  *        format one coordinate (for ticks).
+ * @param options.labelAnchor {'start'|'middle'|'end'}
+ *        default 'middle'.
+ *        svg text-anchor property for tick labels.
  * @param options.labelVector {Array<Number>}
  *        default tickVector.multiply(2).
  *        placement of tick labels
  * @param options.padding {Number}
  *        default 0.05
  *        padding outside extent.  0.05 would be 5% padding based on extent.
- * @param options.ticks {Number}
- *        number of ticks to create.
  * @param options.tickVector {Array<Number>}
  *        direction and length of tick marks.
+ * @param options.ticks {Number}
+ *        number of ticks to create.
  * @param options.title {String}
  *        axis title.
+ * @param options.titleAnchor {'start'|'middle'|'end'}
+ *        default 'middle'.
+ *        svg text-anchor property for title.
+ * @param options.titleVector {Array<Number>}
+ *        default Vector(tickVector).multiply(5).
+ *        direction and length of tick marks.
  */
 var D3Axis = function (options) {
   var _this,
@@ -63,11 +78,14 @@ var D3Axis = function (options) {
     _this.model.set({
       extent: options.extent,
       format: options.format,
+      labelAnchor: options.labelAnchor,
       labelVector: options.labelVector,
       padding: options.padding,
-      ticks: options.ticks,
       tickVector: options.tickVector,
-      title: options.title
+      ticks: options.ticks,
+      title: options.title,
+      titleAnchor: options.titleAnchor,
+      titleVector: options.titleVector
     }, {silent: true});
 
     _extent = D33dPath({
@@ -89,15 +107,18 @@ var D3Axis = function (options) {
     var extent,
         format,
         i,
+        labelAnchor,
         labelVector,
         padding,
         tickEnd,
         tick,
-        ticks,
         tickStart,
         tickUnit,
         tickVector,
-        title;
+        ticks,
+        title,
+        titleAnchor,
+        titleVector;
 
     _ticks.forEach(function (tick) {
       tick.destroy();
@@ -106,15 +127,19 @@ var D3Axis = function (options) {
 
     extent = _this.model.get('extent');
     format = _this.model.get('format');
+    labelAnchor = _this.model.get('labelAnchor');
     labelVector = _this.model.get('labelVector');
     padding = _this.model.get('padding');
-    ticks = _this.model.get('ticks');
     tickVector = _this.model.get('tickVector');
+    ticks = _this.model.get('ticks');
     title = _this.model.get('title');
+    titleAnchor = _this.model.get('titleAnchor');
+    titleVector = _this.model.get('titleVector');
 
     tickEnd = Vector(extent[1]);
     tickStart = Vector(extent[0]);
     tickVector = Vector(tickVector);
+    titleVector = (titleVector ? Vector(titleVector) : tickVector.multiply(5));
 
     // update extent
     if (padding !== 0) {
@@ -130,9 +155,10 @@ var D3Axis = function (options) {
           // center within axis
           .add(tickEnd.subtract(tickStart).multiply(0.5))
           // offset
-          .add(tickVector.multiply(5)).data(),
+          .add(titleVector)
+          .data(),
       text: title,
-      textAnchor: 'middle'
+      textAnchor: titleAnchor
     });
 
     // create ticks
@@ -151,8 +177,9 @@ var D3Axis = function (options) {
             ]
           }),
           D33dText({
+            coords: tick.add(labelVector).data(),
             text: format(tick.data()),
-            coords: tick.add(labelVector).data()
+            textAnchor: labelAnchor
           })
         ]
       }));
