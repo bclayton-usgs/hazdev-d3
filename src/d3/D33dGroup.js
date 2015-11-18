@@ -1,6 +1,7 @@
 'use strict';
 
-var Util = require('util/Util'),
+var D33dSubView = require('./D33dSubView'),
+    Util = require('util/Util'),
     View = require('mvc/View');
 
 
@@ -28,18 +29,10 @@ var D33dGroup = function (options) {
       _initialize;
 
 
-  _this = View(Util.extend({
-    // View will not create an element if any "el" property is specified.
-    // Do this so an element is only created if not configured.
-    el: null
-  }, options));
+  _this = D33dSubView(options);
 
   _initialize = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
-
-    if (_this.el === null) {
-      _this.el = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    }
 
     _this.model.set({
       className: options.className,
