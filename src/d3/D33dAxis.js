@@ -17,6 +17,7 @@ var _DEFAULTS = {
     return ''+coord;
   },
   labelAnchor: 'middle',
+  labelDirection: null,
   labelVector: null,
   padding: 0.05,
   scale: null,
@@ -24,6 +25,7 @@ var _DEFAULTS = {
   ticks: 10,
   title: 'Axis',
   titleAnchor: 'middle',
+  titleDirection: null,
   titleVector: null
 };
 
@@ -40,6 +42,9 @@ var _DEFAULTS = {
  * @param options.labelAnchor {'start'|'middle'|'end'}
  *        default 'middle'.
  *        svg text-anchor property for tick labels.
+ * @param options.labelDirection {Array<Number>}
+ *        default null.
+ *        rotate label text to be parallel to this vector.
  * @param options.labelVector {Array<Number>}
  *        default tickVector.multiply(2).
  *        placement of tick labels
@@ -55,9 +60,12 @@ var _DEFAULTS = {
  * @param options.titleAnchor {'start'|'middle'|'end'}
  *        default 'middle'.
  *        svg text-anchor property for title.
+ * @param options.titleDirection {Array<Number>}
+ *        default null.
+ *        rotate title to be parallel to this vector.
  * @param options.titleVector {Array<Number>}
  *        default Vector(tickVector).multiply(5).
- *        direction and length of tick marks.
+ *        direction and distance to title from center of axis extent.
  */
 var D3Axis = function (options) {
   var _this,
@@ -79,12 +87,14 @@ var D3Axis = function (options) {
       extent: options.extent,
       format: options.format,
       labelAnchor: options.labelAnchor,
+      labelDirection: options.labelDirection,
       labelVector: options.labelVector,
       padding: options.padding,
       tickVector: options.tickVector,
       ticks: options.ticks,
       title: options.title,
       titleAnchor: options.titleAnchor,
+      titleDirection: options.titleDirection,
       titleVector: options.titleVector
     }, {silent: true});
 
@@ -108,6 +118,7 @@ var D3Axis = function (options) {
         format,
         i,
         labelAnchor,
+        labelDirection,
         labelVector,
         padding,
         tickEnd,
@@ -118,6 +129,7 @@ var D3Axis = function (options) {
         ticks,
         title,
         titleAnchor,
+        titleDirection,
         titleVector;
 
     _ticks.forEach(function (tick) {
@@ -128,12 +140,14 @@ var D3Axis = function (options) {
     extent = _this.model.get('extent');
     format = _this.model.get('format');
     labelAnchor = _this.model.get('labelAnchor');
+    labelDirection = _this.model.get('labelDirection');
     labelVector = _this.model.get('labelVector');
     padding = _this.model.get('padding');
     tickVector = _this.model.get('tickVector');
     ticks = _this.model.get('ticks');
     title = _this.model.get('title');
     titleAnchor = _this.model.get('titleAnchor');
+    titleDirection = _this.model.get('titleDirection');
     titleVector = _this.model.get('titleVector');
 
     tickEnd = Vector(extent[1]);
@@ -157,7 +171,7 @@ var D3Axis = function (options) {
           // offset
           .add(titleVector)
           .data(),
-      direction: extent,
+      direction: titleDirection,
       text: title,
       textAnchor: titleAnchor
     });
@@ -179,7 +193,7 @@ var D3Axis = function (options) {
           }),
           D33dText({
             coords: tick.add(labelVector).data(),
-            direction: extent,
+            direction: labelDirection,
             text: format(tick.data()),
             textAnchor: labelAnchor
           })
