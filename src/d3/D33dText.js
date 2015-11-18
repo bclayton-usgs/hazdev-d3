@@ -1,8 +1,7 @@
 'use strict';
 
 var D33dSubView = require('./D33dSubView'),
-    Util = require('util/Util'),
-    View = require('mvc/View');
+    Util = require('util/Util');
 
 
 var _DEFAULTS = {
