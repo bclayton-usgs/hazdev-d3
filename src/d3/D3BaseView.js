@@ -103,7 +103,7 @@ var D3BaseView = function (options) {
     _this.model.set(Util.extend({}, _DEFAULTS, options), {silent: true});
 
     el = _this.el;
-    el.classList.add('D3View');
+    el.classList.add('D3BaseView');
     el.innerHTML =
           '<svg xmlns="http://www.w3.org/2000/svg">' +
             '<defs>' +
