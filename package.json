@@ -1,6 +1,6 @@
 {
   "name": "hazdev-d3",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "http://earthquake.usgs.gov/",
   "repository": "https://github.com/usgs/hazdev-d3.git",
   "description": "D3 Utilities",
