@@ -364,9 +364,10 @@ var D3View = function (options) {
         xAxisScale,
         xAxisTicks,
         xExtent,
+        xPlotExtent,
         yAxisScale,
         yAxisTicks,
-        yExtent;
+        yPlotExtent;
 
 
     options = _this.model.get();
@@ -456,10 +457,11 @@ var D3View = function (options) {
     }
 
     // update axes extent
-    xExtent = _this.getPlotXExtent();
-    xAxisScale.domain(xExtent);
-    yExtent = _this.getPlotYExtent(xExtent);
-    yAxisScale.domain(yExtent);
+    xExtent = _this.getXExtent();
+    xPlotExtent = _this.getPlotXExtent();
+    xAxisScale.domain(xPlotExtent);
+    yPlotExtent = _this.getPlotYExtent(xPlotExtent);
+    yAxisScale.domain(yPlotExtent);
 
     // redraw axes
     _xAxis.scale(xAxisScale);
@@ -474,7 +476,7 @@ var D3View = function (options) {
     _yAxis.tickFormat(options.yAxisFormat);
     yAxisTicks = options.yAxisTicks;
     if (typeof yAxisTicks === 'function') {
-      yAxisTicks = yAxisTicks(yExtent);
+      yAxisTicks = yAxisTicks(yPlotExtent);
     }
     _yAxis.tickValues(yAxisTicks);
 
