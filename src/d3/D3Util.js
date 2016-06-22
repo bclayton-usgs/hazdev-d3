@@ -86,6 +86,12 @@ var _padExtent = function (extent, amount) {
       end = extent[extent.length - 1],
       range = end - start,
       pad = range * amount;
+
+  // Deal with case where there is only one value for the extents.
+  if (pad === 0) {
+    pad = amount;
+  }
+
   return [start - pad, end + pad];
 };
 
