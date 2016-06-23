@@ -458,7 +458,7 @@ var D3View = function (options) {
 
     // update axes extent
     xExtent = _this.getXExtent();
-    xPlotExtent = _this.getPlotXExtent();
+    xPlotExtent = _this.getPlotXExtent(xExtent);
     xAxisScale.domain(xPlotExtent);
     yPlotExtent = _this.getPlotYExtent(xPlotExtent);
     yAxisScale.domain(yPlotExtent);
@@ -555,12 +555,10 @@ var D3View = function (options) {
    *
    * @return {Array<Number>} x extents.
    */
-  _this.getPlotXExtent = function () {
+  _this.getPlotXExtent = function (xExtent) {
     var xAxisPadding,
-        xAxisScale,
-        xExtent;
+        xAxisScale;
 
-    xExtent = _this.getXExtent();
     xAxisPadding = _this.model.get('xAxisPadding');
     if (xAxisPadding) {
       xAxisScale = _this.model.get('xAxisScale');
