@@ -381,6 +381,17 @@ var D3BaseView = function (options) {
     _this.renderLegend({
       el: _legend
     });
+
+    /**
+      work around suggested by
+      https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/3723601/
+     */
+    _this.el.classList.add('ms-render-fix');
+    setTimeout(function () {
+      if (_this) {
+        _this.el.classList.remove('ms-render-fix');
+      }
+    }, 50);
   };
 
   /**
