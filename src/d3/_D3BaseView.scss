@@ -9,6 +9,14 @@
   position: relative;
   width: 100%;
 
+  /**
+    work around suggested by
+    https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/3723601/
+   */
+  &.ms-render-fix {
+    font-size: 101%;
+  }
+
   > svg {
     fill: none;
     left: 0;
