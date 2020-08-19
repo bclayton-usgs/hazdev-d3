@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
-import { HazdevD3Component } from './hazdev-d3.component';
 
-
+import { D3ViewComponent } from './components/d3-view/d3-view.component';
 
 @NgModule({
-  declarations: [HazdevD3Component],
-  imports: [
-  ],
-  exports: [HazdevD3Component]
+  declarations: [D3ViewComponent],
+  exports: [D3ViewComponent]
 })
 export class HazdevD3Module { }

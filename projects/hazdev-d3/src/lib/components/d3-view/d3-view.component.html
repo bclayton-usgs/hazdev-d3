@@ -1,0 +1,28 @@
+<p>d3-view works!</p>
+<div #d3View class="D3View">
+  <svg #svg xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <clipPath id="plotAreaClip">
+        <rect #plotAreaClip x="0" y="0"></rect>
+      </clipPath>
+    </defs>
+    <g #margin class="margin">
+      <rect #outerFrame class="outer-frame"></rect>
+      <text #plotTitle class="plot-title" text-anchor="middle"></text>
+      <g #padding class="padding">
+        <rect #innerFrame class="inner-frame"></rect>
+        <g #legend class="legend"></g>
+        <g #x class="x">
+          <g #xAxis class="axis"></g>
+          <text #xAxisLabel class="label" text-anchor="middle"></text>
+        </g>
+        <g #y class="y">
+          <g #yAxis class="axis"></g>
+          <text #yAxisLabel class="label" text-anchor="middle" transform="rotate(-90)"></text>
+        </g>
+        <g #plot class="plot"></g>
+        <g #tooltip class="tooltip"></g>
+      </g>
+    </g>
+  </svg>
+</div>

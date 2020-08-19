@@ -12,6 +12,12 @@
     },
     {
       "path": "./projects/hazdev-d3/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/example/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/example/tsconfig.spec.json"
     }
 ]
 }
