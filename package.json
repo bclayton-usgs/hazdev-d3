@@ -63,7 +63,7 @@
     "grunt-postcss": "^0.7.0",
     "grunt-ts": "^6.0.0-beta.22",
     "hazdev-template": "~0.2.0",
-    "hazdev-webutils": "file:../hazdev-webutils",
+    "hazdev-webutils": "usgs/hazdev-webutils",
     "mocha": "^2.1.0",
     "postcss-import": "^7.1.2",
     "precss": "^1.3.0",
