@@ -1,10 +1,10 @@
 'use strict';
 
 var d3 = require('d3'),
-    Collection = require('mvc/Collection'),
+    Collection = require('hazdev-webutils').mvc.Collection,
     D3Util = require('./D3Util'),
-    Util = require('util/Util'),
-    View = require('mvc/View');
+    Util = require('hazdev-webutils').util.Util,
+    View = require('hazdev-webutils').mvc.View;
 
 
 /**

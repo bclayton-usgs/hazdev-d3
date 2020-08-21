@@ -1,10 +1,10 @@
 'use strict';
 
 
-var Camera = require('math/Camera'),
+var Camera = require('hazdev-webutils').math.Camera,
     D3BaseView = require('./D3BaseView'),
-    Util = require('util/Util'),
-    Vector = require('math/Vector');
+    Util = require('hazdev-webutils').util.Util,
+    Vector = require('hazdev-webutils').math.Vector;
 
 
 var _DEFAULTS = {

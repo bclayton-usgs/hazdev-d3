@@ -2,7 +2,7 @@
 
 var D33dGroup = require('./D33dGroup'),
     D33dPath = require('./D33dPath'),
-    Util = require('util/Util');
+    Util = require('hazdev-webutils').util.Util;
 
 
 var _DEFAULTS = {

@@ -2,8 +2,8 @@
 
 var d3 = require('d3'),
     ClassList = require('./ClassList'),
-    D3SubView = require('d3/D3SubView'),
-    Util = require('util/Util');
+    D3SubView = require('./D3SubView'),
+    Util = require('hazdev-webutils').util.Util;
 
 
 /**

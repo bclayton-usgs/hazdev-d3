@@ -3,8 +3,8 @@
 var D33dGroup = require('./D33dGroup'),
     D33dPath = require('./D33dPath'),
     D33dText = require('./D33dText'),
-    Util = require('util/Util'),
-    Vector = require('math/Vector');
+    Util = require('hazdev-webutils').util.Util,
+    Vector = require('hazdev-webutils').math.Vector;
 
 
 var _DEFAULTS = {

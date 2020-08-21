@@ -1,7 +1,7 @@
 'use strict';
 
 var D33dSubView = require('./D33dSubView'),
-    Util = require('util/Util');
+    Util = require('hazdev-webutils').util.Util;
 
 
 var _DEFAULTS = {

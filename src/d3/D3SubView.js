@@ -2,8 +2,8 @@
 
 var d3 = require('d3'),
     ClassList = require('./ClassList'),
-    Util = require('util/Util'),
-    View = require('mvc/View');
+    Util = require('hazdev-webutils').util.Util,
+    View = require('hazdev-webutils').mvc.View;
 
 
 var ID_SEQUENCE = 0;
